@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 export default function (){
     return(
         <div>
-            <Grid conatiner spacing={5} style={{display:"flex"}}>
+            <Grid container spacing={5} style={{display:"flex"}}>
                 <Grid item xs={12} sm={6} md={4}>
                     <Lolly 
                     Top="#5ADF49"

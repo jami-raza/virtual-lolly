@@ -1,6 +1,7 @@
 const { ApolloServer, gql } = require('apollo-server-lambda')
 const faunadb = require('faunadb');
 q = faunadb.query;
+const shortid = require("shortid");
 
 require("dotenv").config()
 
@@ -26,7 +27,7 @@ const typeDefs = gql`
       sender:String!,
       msg:String!,
       reci:String!,
-      link:String!
+      
       ): VirtualLolly
   }
 `
@@ -77,18 +78,19 @@ const resolvers = {
     }
   },
   Mutation:{
-    addLolly: async (_, {c1,c2,c3,sender,msg,reci,link}) => {
+    addLolly: async (_, args) => {
+      const id = shortid.generate()
+      args.link = id
       try{
         const client = new faunadb.Client({secret: process.env.Faunadb_secret })
         const result = await client.query(
           q.Create(q.Collection('Lolly'),{
-            data:{
-            c1, c2, c3,sender,msg,reci,link
-          }
+            data:args
             
           })
         )
-        console.log(result)
+       
+        
         return result.data
       }catch(err){
         console.log(err)

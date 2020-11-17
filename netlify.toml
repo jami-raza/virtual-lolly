@@ -2,3 +2,7 @@
     command= "yarn build"
     publish= "public/"
     functions= "functions/"
+
+[[redirects]]
+    from = "/lolly/*"
+    to = "/lolly?id=:splat"
