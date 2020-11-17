@@ -5,4 +5,4 @@
 
 [[redirects]]
     from = "/lolly/*"
-    to = "/lolly?id=:splat"
+    to = "/lollyCard?id=:splat"

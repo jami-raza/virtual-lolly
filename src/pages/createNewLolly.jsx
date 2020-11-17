@@ -56,7 +56,7 @@ export default function  () {
             }
         })
         console.log('result from server', result.data);
-        navigate(`/lolly?id=${result.data.addLolly.link}`)
+        navigate(`/lollyCard?id=${result.data.addLolly.link}`)
 
     }
     useEffect(() => {
