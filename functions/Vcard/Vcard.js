@@ -6,6 +6,7 @@ const shortid = require('shortid');
 const typeDefs = gql`
   type Query {
     lolly:[VirtualLolly!]
+    getlollyBypath(link:String!): VirtualLolly
   }
   type VirtualLolly {
     id: ID!
@@ -24,7 +25,8 @@ const typeDefs = gql`
       sender:String!,
       msg:String!,
       reci:String!,
-      link:String!): VirtualLolly
+      link:String!
+      ): VirtualLolly
   }
 `
 
@@ -43,14 +45,14 @@ const resolvers = {
         console.log(result.data)
         return result.data.map((d) => {
           return{
-            id:d.ref.id,
+            
             c1:d.data.c1,
             c2:d.data.c2,
             c3:d.data.c3,
             sender:d.data.sender,
             msg:d.data.msg,
             reci:d.data.reci,
-            link:d.data.link,
+            link:d.data.link
           }
             
 
@@ -59,21 +61,32 @@ const resolvers = {
       }catch(err){
         console.log(err)
       }
+    },
+    getlollyBypath: async (_, {args}) => {
+      try {
+        const result = await client.query(
+          q.Get(q.Match(q.Index('getLolly'),args.link))
+        )
+        return result.data
+      }catch(err){
+        console.log(err)
+      }
     }
   },
   Mutation:{
-    addLolly: async (_, {c1, c2, c3, sender, msg, reci}) => {
+    addLolly: async (_, {c1,c2,c3,sender,msg,reci,link}) => {
       try{
+        
         const result = await client.query(
           q.Create(q.Collection('Lolly'),{
             data:{
-              c1,c2,c3,sender,msg,reci,
-              link: shortid.generate()
-            }
+            c1, c2, c3,sender,msg,reci,link
+          }
+            
           })
         )
-        console.log(result.data)
-        return result.data.data
+        console.log(result)
+        return result.data
       }catch(err){
         console.log(err)
       }
