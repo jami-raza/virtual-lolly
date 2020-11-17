@@ -1,7 +1,8 @@
 const { ApolloServer, gql } = require('apollo-server-lambda')
 const faunadb = require('faunadb');
 q = faunadb.query;
-const shortid = require('shortid');
+
+require("dotenv").config()
 
 const typeDefs = gql`
   type Query {
@@ -30,12 +31,13 @@ const typeDefs = gql`
   }
 `
 
-const client = new faunadb.Client({secret:"fnAD6EFsqIACAbyMUIBkf-9N8h4ncLSdCk30MKeb"})
+
 
 const resolvers = {
   Query: {
     lolly: async (root,args,context) => {
       try{
+        const client = new faunadb.Client({secret: process.env.Faunadb_secret })
         const result = await client.query(
           q.Map(
             q.Paginate(q.Match(q.Index('V_Card'))),
@@ -64,6 +66,7 @@ const resolvers = {
     },
     getlollyBypath: async (_, {args}) => {
       try {
+        const client = new faunadb.Client({secret: process.env.Faunadb_secret })
         const result = await client.query(
           q.Get(q.Match(q.Index('getLolly'),args.link))
         )
@@ -76,7 +79,7 @@ const resolvers = {
   Mutation:{
     addLolly: async (_, {c1,c2,c3,sender,msg,reci,link}) => {
       try{
-        
+        const client = new faunadb.Client({secret: process.env.Faunadb_secret })
         const result = await client.query(
           q.Create(q.Collection('Lolly'),{
             data:{
