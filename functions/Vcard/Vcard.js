@@ -65,11 +65,11 @@ const resolvers = {
         console.log(err)
       }
     },
-    getlollyBypath: async (_, {args}) => {
+    getlollyBypath: async (_, {link}) => {
       try {
         const client = new faunadb.Client({secret: process.env.Faunadb_secret })
         const result = await client.query(
-          q.Get(q.Match(q.Index('getLolly'),args.link))
+          q.Get(q.Match(q.Index('getLolly'),link))
         )
         return result.data
       }catch(err){
